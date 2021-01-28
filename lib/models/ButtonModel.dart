@@ -30,14 +30,15 @@ class Params {
   String dlgType;
   String buttons;
   String requestID;
-
-  Params({this.message, this.dlgType, this.buttons, this.requestID});
+  String caption;
+  Params({this.message, this.dlgType, this.buttons, this.requestID,this.caption});
 
   Params.fromJson(Map<String, dynamic> json) {
     message = json['Message'];
     dlgType = json['DlgType'];
     buttons = json['Buttons'];
     requestID = json['RequestID'];
+    caption = json['Caption'];
   }
 
   Map<String, dynamic> toJson() {
@@ -46,6 +47,7 @@ class Params {
     data['DlgType'] = this.dlgType;
     data['Buttons'] = this.buttons;
     data['RequestID'] = this.requestID;
+    data['Caption'] = this.caption;
     return data;
   }
 }
