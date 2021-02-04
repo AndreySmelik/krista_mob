@@ -56,7 +56,7 @@ class DocTitleState extends State<DocTitle> {
   ScrollController controller;
   TextEditingController textListController = TextEditingController();
   List<TextEditingController> textController;
-  String recordNum = "12";
+  String recordNum = "50";
   String recordMax = "";
   String toolButton = '';
   List<Records> data = [];
@@ -258,7 +258,7 @@ class DocTitleState extends State<DocTitle> {
       if (this.mounted) {
         setState(() {});
       }
-    } catch(error){showError(error.toString()+'123');}
+    } catch(error){showError(error.toString()+'1234');}
   }
 
   buttonRequest(String iD) async {
@@ -352,7 +352,7 @@ class DocTitleState extends State<DocTitle> {
     if (field.recordCount != null) {
       recordMax = field.recordCount;
 
-      if (int.parse(field.recordCount) < 12) {
+      if (int.parse(field.recordCount) < 50) {
         recordNum = field.recordCount;
       }
 
@@ -464,10 +464,10 @@ class DocTitleState extends State<DocTitle> {
         recordMax= jsData['RecordCount'];
         if (recordMax==null) recordMax='0';
         print(recordMax);
-        if (int.parse( recordMax) < 12) {
+        if (int.parse( recordMax) < 50) {
           recordNum =  recordMax;
         }
-        else recordNum='12';
+        else recordNum='50';
         print('after: '+recordMax);
       });
     }
