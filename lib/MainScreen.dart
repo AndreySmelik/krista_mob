@@ -24,11 +24,12 @@ class MainScreenHttp extends StatefulWidget {
 class MainScreenHttpState extends State<MainScreenHttp> {
   StructureModel structure;
   List<Sections> data = [];
+  String server="";
 
   @override
   void initState() {
     super.initState();
-    sendRequestGet();
+    userEnter();
   } //initState
 
   @override
@@ -37,12 +38,45 @@ class MainScreenHttpState extends State<MainScreenHttp> {
     sendRequestLeave();
   }
 
+  userEnter() async {
+    server=await getUserInfo();
+  await sendRequestGet();
+  }
 
-  sendRequestGet() async {
+ Future<String> getUserInfo() async {
     Map<String, String> header = {
       "LicGUID": widget.token,
       "Content-Type": "application/json"
     };
+    String server="";
+    try {
+      var response = await http.get('http://' + widget.listHeader[0] + '/mobile~project/GetUserInfo'
+          +'?ConfigName='+widget.listHeader[1]+
+          '&UserName=' +widget.listHeader[2]
+          , headers: header);
+      print(response.body.toString());
+      Map jsData = json.decode(response.body);
+      server = jsData['Server'];
+      print(server);
+    } catch (error) {
+      showError(error.toString()+'789');
+    }
+    if (server==null){
+      server='';
+    }
+    return server;
+  } //sendRequestGet
+
+
+  sendRequestGet() async {
+
+    Map<String, String> header = {
+      "LicGUID": widget.token,
+      "Content-Type": "application/json",
+    };
+    if (server!=''){
+    header.addAll({ "StimWebSrv": server });
+    }
 
     var msg = jsonEncode({
       "ConfigName": widget.listHeader[1],
@@ -75,7 +109,7 @@ class MainScreenHttpState extends State<MainScreenHttp> {
       }
     } catch (error) {
       isErr = true;
-      showError(error.toString());
+      showError(error.toString()+'444');
     }
     if (isErr == false)
       try {
@@ -108,7 +142,9 @@ class MainScreenHttpState extends State<MainScreenHttp> {
       "LicGUID": widget.token,
       "Content-Type": "application/json"
     };
-
+    if (server!=''){
+      header.addAll({ "StimWebSrv": server });
+    }
     http.get('http://' + widget.listHeader[0] + '/mobile~project/leave', headers: header).then((response) {
       print(response.body);
     });
@@ -151,6 +187,7 @@ class MainScreenHttpState extends State<MainScreenHttp> {
                       j: i,
                       token: token,
                       url:widget.listHeader[0],
+                      server:server,
                     )));
       }
       else if (structure.sections[i].documents.length==1)
@@ -166,6 +203,7 @@ class MainScreenHttpState extends State<MainScreenHttp> {
                   token: token,
                   sectionFlag: false,
                   sectionIndex: i,
+                  server:server,
                 )));
       }
       else
@@ -179,6 +217,7 @@ class MainScreenHttpState extends State<MainScreenHttp> {
                     subSection: i,
                     subSectionFlag: false,
                     url: widget.listHeader[0],
+                    server:server,
                     token: token)));
         print("gg12");
       }
@@ -272,21 +311,11 @@ class MainScreen extends StatelessWidget {
   @override
   Widget build(BuildContext ctxt) {
     return new Scaffold(
-        drawer:Drawer(
+        endDrawer:Drawer(
           child: ListView(
             padding: EdgeInsets.zero,
             children: <Widget>[
               _createHeader(listHeader[2]+'\n'+listHeader[0]),
-              /*_createDrawerItem(icon: Icons.contacts,text: 'Contacts',),
-              _createDrawerItem(icon: Icons.event, text: 'Events',),
-              _createDrawerItem(icon: Icons.note, text: 'Notes',),
-              Divider(),
-              _createDrawerItem(icon: Icons.collections_bookmark, text:'Steps'),
-              _createDrawerItem(icon: Icons.face, text: 'Authors'),
-              _createDrawerItem(icon: Icons.account_box, text: 'Flutter Documentation'),
-              _createDrawerItem(icon: Icons.stars, text: 'Useful Links'),
-              Divider(),
-              _createDrawerItem(icon: Icons.bug_report, text: 'Report an issue'),*/
               ListTile(
                 title: Text(listHeader[5]),
                 onTap: () {},

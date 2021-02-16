@@ -28,6 +28,7 @@ class CardDocument extends StatefulWidget {
   bool sectionFlag;
   int docIndex;
   String titleBar = '';
+  String server;
 
   CardDocument({
     @required this.structure,
@@ -44,6 +45,7 @@ class CardDocument extends StatefulWidget {
     @required this.subSectionIndex,
     @required this.docIndex,
     @required this.listButtons,
+    @required this.server,
   });
 
   @override
@@ -109,6 +111,7 @@ class CardDocumentState extends State<CardDocument> {
                   subSectionIndex: widget.subSectionIndex,
                   sectionFlag: widget.sectionFlag,
                   docIndex: widget.docIndex,
+                  server:widget.server,
                 )));
   }
 
@@ -221,6 +224,9 @@ class CardDocumentState extends State<CardDocument> {
       "PlaneView": "0",
       "WSM": "1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     try {
       print('http://' + widget.url + '/mobile~documents/HandleToolButton');
       print(header);
@@ -279,6 +285,9 @@ class CardDocumentState extends State<CardDocument> {
       "RequestID": requestID,
       "WSM": "1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var msg = jsonEncode({'Result': ''});
     print('http://' + widget.url + '/mobile~project/ResumeRequestEMPTY');
     var response = await http.post('http://' + widget.url + '/mobile~project/ResumeRequest', headers: header, body: msg);
@@ -301,6 +310,9 @@ class CardDocumentState extends State<CardDocument> {
       "RequestID": requestID,
       "WSM": "1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var msg = jsonEncode({"Result": result});
     var msgText = jsonEncode({"Text": message, "Result": result});
 
@@ -533,11 +545,18 @@ class CardDocumentState extends State<CardDocument> {
     return Stack(
       children: <Widget>[
         Scaffold(
-          drawer: Drawer(
+         endDrawer: Drawer(
             child: ListView(
               padding: EdgeInsets.zero,
               children: <Widget>[
                 _createHeader(''),
+                ListTile(
+                  title: Text(
+                      'Детализация'
+                  ),
+                  onTap:() { _sendToNextSection();},
+                  leading: Icon(Icons.library_books),
+                ),
                 for (int i = 0; i < widget.listButtons.length; i++)
                   ListTile(
                     title: Text(
@@ -587,24 +606,17 @@ class CardDocumentState extends State<CardDocument> {
                         style: TextStyle(fontSize: 18),
                       )),
                 ),
-                Expanded(
-                    flex: 35,
-                    child: Container(
-                        alignment: Alignment.center,
-                        child: Text(
-                          widget.records.data[4].text,
-                          style: TextStyle(fontSize: 16),
-                        ))),
               ],
             ),
             actions: <Widget>[
-              IconButton(
-                icon: const Icon(Icons.library_books),
-                tooltip: 'Детализация',
-                onPressed: () {
-                  _sendToNextSection();
-                },
+              Builder(
+                builder: (context) => IconButton(
+                  icon: Icon(Icons.menu),
+                  onPressed: () => Scaffold.of(context).openEndDrawer(),
+                  tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                ),
               ),
+
             ],
           ),
           body: _buildList1(),

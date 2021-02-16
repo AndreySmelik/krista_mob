@@ -10,7 +10,7 @@ class Document extends StatefulWidget {
   String token;
   String url;
   bool subSectionFlag;
-
+  String server;
   Document({
     Key key,
     @required this.structure,
@@ -19,6 +19,7 @@ class Document extends StatefulWidget {
     @required this.token,
     @required this.url,
     @required this.subSectionFlag,
+    @required this.server,
   });
 
   @override
@@ -104,6 +105,7 @@ class DocumentState extends State<Document> {
                     sectionFlag: false,
                     sectionIndex: widget.section,
                     docIndex: i,
+                    server:widget.server,
                   )));
     }
   } //_sendReques
@@ -127,6 +129,7 @@ class DocumentState extends State<Document> {
                     sectionIndex: widget.section,
                     subSectionIndex: widget.subSection,
                     docIndex: i,
+                    server:widget.server,
                   )));
     }
   }

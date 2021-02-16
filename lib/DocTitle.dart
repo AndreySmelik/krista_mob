@@ -26,7 +26,7 @@ class DocTitle extends StatefulWidget {
   int subSectionIndex;
   int docIndex;
   String titleBar='';
-
+  String server;
   DocTitle(
       {Key key,
         @required this.structure,
@@ -37,7 +37,8 @@ class DocTitle extends StatefulWidget {
         @required this.sectionFlag,
         @required this.sectionIndex,
         @required this.subSectionIndex,
-        @required this.docIndex,});
+        @required this.docIndex,
+        @required this.server });
 
   @override
   State<StatefulWidget> createState() => DocTitleState(
@@ -208,6 +209,9 @@ class DocTitleState extends State<DocTitle> {
       "GridState": "1",
       "WSM":"1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
   try {
       print('http://' + widget.url +   '/mobile~documents/HandleToolButton');
       var response = await http.get( 'http://' + widget.url +   '/mobile~documents/HandleToolButton', headers: header);
@@ -235,6 +239,9 @@ class DocTitleState extends State<DocTitle> {
       "RequestID": requestID,
       "WSM":"1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var msg = jsonEncode({
       "Result": result
     });
@@ -266,18 +273,21 @@ class DocTitleState extends State<DocTitle> {
   }
 
   getDocumentLayout() async {
-    Map<String, String> header1 = {
+    Map<String, String> header = {
       "LicGUID": token,
       "Content-Type": "application/json",
       "DocCfgID": docCfgID,
       "SectionID": sectionId,
       "GridState": "1",
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     print('gwt '+docCfgID + ' ' + sectionId);
     try {
       print('http://' + widget.url +   '/mobile~documents/GetDocumentLayout');
       print(token);
-      var response = await http.get( 'http://' + widget.url +   '/mobile~documents/GetDocumentLayout', headers: header1);
+      var response = await http.get( 'http://' + widget.url +   '/mobile~documents/GetDocumentLayout', headers: header);
       print('body: '+response.statusCode.toString());
       String a=response.body.toString();
       searchTitleList = SearchTitleListModel.fromJson(json.decode(response.body));
@@ -338,7 +348,9 @@ class DocTitleState extends State<DocTitle> {
       "SectionID": sectionId,
       "ParentID": "0"
     };
-
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var msg = jsonEncode({"Command": "GetFields"});
     print('http://' + widget.url + '/mobile~documents/HandleDocument');
     print(header);
@@ -390,7 +402,9 @@ class DocTitleState extends State<DocTitle> {
       "LicGUID": token,
       "Content-Type": "application/json",
     };
-
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var response;
     String responseStr='';
 
@@ -425,7 +439,9 @@ class DocTitleState extends State<DocTitle> {
       "LicGUID": token,
       "Content-Type": "application/json",
     };
-
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     Map<String, String> headerHandle = {
       "LicGUID": token,
       "Content-Type": "application/json",
@@ -433,6 +449,9 @@ class DocTitleState extends State<DocTitle> {
       "SectionID": sectionId,
       "ParentID": "0"
     };
+    if (widget.server!=''){
+      headerHandle.addAll({ "StimWebSrv": widget.server });
+    }
     print('http://' + widget.url + '/mobile~programs/FixParamHistory?Path=Documents\\Params\\' +
         docCfgID +
         '\\' +
@@ -484,6 +503,9 @@ class DocTitleState extends State<DocTitle> {
       "SectionID": sectionId,
       "ParentID": "0"
     };
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     print('recNum: '+recordNum);
     print('dataLen: '+data.length.toString());
     if (data.length + int.parse(recordNum) >= int.parse(recordMax)) {
@@ -539,6 +561,9 @@ class DocTitleState extends State<DocTitle> {
         "SectionID": sectionId,
         "ParentID": "0"
       };
+      if (widget.server!=''){
+        header.addAll({ "StimWebSrv": widget.server });
+      }
       print('recNum: '+recordNum);
       print('dataLen: '+data.length.toString());
       if (data.length + int.parse(recordNum) >= int.parse(recordMax)) {
@@ -589,6 +614,7 @@ class DocTitleState extends State<DocTitle> {
                     sectionFlag:widget.sectionFlag,
                     docIndex: widget.docIndex,
                     listButtons: listButtons,
+                    server:widget.server,
                 )));
   }
 
@@ -733,6 +759,9 @@ class DocTitleState extends State<DocTitle> {
                       "LicGUID": token,
                       "Content-Type": "application/json",
                     };
+                    if (widget.server!=''){
+                      header.addAll({ "StimWebSrv": widget.server });
+                    }
                     print('getManual');
                     try {
                       var response = await http.get('http://' + widget.url + '/mobile~programs/GetParamValues?Path=Documents\\Params\\' + docCfgID +  '\\' + sectionId +  '&ID=' +  iD,

@@ -23,7 +23,7 @@ class FullCardDocument extends StatefulWidget {
   bool sectionFlag;
   int docIndex;
   String titleBar='';
-
+  String server;
 
   FullCardDocument({
     @required this.structure,
@@ -40,6 +40,7 @@ class FullCardDocument extends StatefulWidget {
     @required this.sectionFlag,
     @required this.subSectionIndex,
     @required this.docIndex,
+    @required this.server,
   });
 
   @override
@@ -127,6 +128,9 @@ class FullCardDocumentState extends State<FullCardDocument> {
       "GridState": "1",
     };
 
+    if (widget.server!=''){
+      header1.addAll({ "StimWebSrv": widget.server });
+    }
     var response = await http.get('http://' + widget.url + '/mobile~documents/GetDocumentLayout', headers: header1);
     print('http://' + widget.url + '/mobile~documents/GetDocumentLayout');
     print(header1);
@@ -157,6 +161,9 @@ class FullCardDocumentState extends State<FullCardDocument> {
       "ParentID": parentID
     };
 
+    if (widget.server!=''){
+      header.addAll({ "StimWebSrv": widget.server });
+    }
     var msg = jsonEncode({"Command": "GetFields"});
     var msgRef = jsonEncode({"Command": "Refresh"});
     print('http://' + widget.url + '/mobile~documents/HandleDocument');

@@ -7,8 +7,14 @@ class SubSection extends StatefulWidget {
   int j;
   String token;
   String url;
+  String server;
   SubSection(
-      {Key key, @required this.structure, @required this.j, @required this.token, @required this.url});
+      {Key key,
+        @required this.structure,
+        @required this.j,
+        @required this.token,
+        @required this.url,
+        @required this.server});
 
   @override
   State<StatefulWidget> createState() => SubSectionState(structure: structure, j: j,token:token);
@@ -29,7 +35,13 @@ class SubSectionState extends State<SubSection> {
           context,
           MaterialPageRoute(
               builder: (context) => Document(
-                  structure: structure, section: j, subSectionFlag: subSectionFlag, subSection: i,url:widget.url, token: token)));
+                  structure: structure,
+                  section: j,
+                  subSectionFlag: subSectionFlag,
+                  subSection: i,
+                  url:widget.url,
+                  token: token,
+                  server:widget.server)));
     }
   } //_sendReques
 
@@ -58,7 +70,7 @@ class SubSectionState extends State<SubSection> {
                   //child: Image.memory(Base64Decoder().convert(_konfig.sections[i].RCDATA== null ? '': _konfig.sections[i].RCDATA)),
                   child:
                   Image.network(
-                    'http://win-stim.krista.ru:8080/server~' +
+                    'http://'+widget.url+'server~' +
                        structure.sections[j].image,
                   ),
                 ),
@@ -80,7 +92,7 @@ class SubSectionState extends State<SubSection> {
 
 
                     child: Image.network(
-                      'http://win-stim.krista.ru:8080/server~' +
+                      'http://'+widget.url+'server~' +
                           structure.sections[j].subSections[i].image,
                     ),
                   ),
