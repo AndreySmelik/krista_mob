@@ -8,7 +8,7 @@ void main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  Directory externalDir  = await getExternalStorageDirectory();
+  Directory externalDir  = Platform.isIOS ? await getApplicationDocumentsDirectory() : await getExternalStorageDirectory();
  String path = externalDir.path.toString() + "/Log.txt";
 
   CatcherOptions debugOptions = CatcherOptions(DialogReportMode(), [ConsoleHandler()]);
